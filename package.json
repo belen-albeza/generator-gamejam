@@ -1,12 +1,12 @@
 {
   "name": "generator-gamejam",
-  "version": "0.0.0",
-  "description": "Yeoman generator",
+  "version": "1.0.0",
+  "description": "Yeoman generator for game jam projects (Phaser)",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "belen-albeza/generator-gamejam",
   "author": {
-    "name": "Belén Albeza",
+    "name": "Belén -BenKo- Albeza",
     "email": "belen.albeza@gmail.com",
     "url": "https://github.com/belen-albeza"
   },
@@ -20,7 +20,7 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator", "game", "phaser"
   ],
   "dependencies": {
     "chalk": "^0.5.0",
