@@ -1,0 +1,19 @@
+{
+  "version": "0.0.0",
+  "name": "<%= _.slugify(gameName) %>",
+  "version": "0.0.0",
+  "author": "",
+  "license": "<%= license.key %>",
+  "dependencies": {
+    "browserify": "*",
+    "gulp": "*",
+    "gulp-connect": "*",
+    "gulp-jshint": "*",
+    "gulp-rsync": "*",
+    "gulp-util": "*",
+    "jshint-stylish": "*",
+    "phaser": "*",
+    "vinyl-source-stream": "*",
+    "watchify": "*"
+  }
+}
