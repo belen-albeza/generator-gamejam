@@ -1,47 +1,113 @@
-# generator-gamejam [![Build Status](https://secure.travis-ci.org/belen-albeza/generator-gamejam.png?branch=master)](https://travis-ci.org/belen-albeza/generator-gamejam)
+# generator-gamejam
 
-> [Yeoman](http://yeoman.io) generator
+This is a [Yeoman](http://yeoman.io) generator for game jam HTML5 projects. With this you can quickly create a project skeleton that contains:
+
+- An `index.html` file that displays a canvas and loads the awesome [Phaser](http://phaser.io) game library.
+- A local web server you can run your game into (needed for Phaser).
+- Developer tools: Gulp, JSHint, Browserify.
+- A task to create a release of your game that you can zip or backup.
+- A task to deploy your game into your own server online.
 
 
 ## Getting Started
 
-### What is Yeoman?
-
-Trick question. It's not a thing. It's this guy:
-
-![](http://i.imgur.com/JHaAlBJ.png)
-
-Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
-
-Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
+You need to install both Yeoman and this generator globally:
 
 ```bash
-npm install -g yo
+npm install -g yo generator-gamejam
 ```
 
-### Yeoman Generators
+Create a directory for your project and run yeoman from within:
 
-Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
-
-To install generator-gamejam from npm, run:
-
-```bash
-npm install -g generator-gamejam
 ```
-
-Finally, initiate the generator:
-
-```bash
+mkdir awesome-game
+cd awesome-game
 yo gamejam
 ```
 
-### Getting To Know Yeoman
+You will get this project skeleton:
 
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
+```
+├── app
+│   ├── images
+│   │   ├── phaser.png
+│   │   └── preloader_bar.png
+│   ├── index.html
+│   ├── js
+│   │   ├── main.js
+│   │   └── play_scene.js
+│   └── styles.css
+├── gulp.config.json
+├── gulpfile.js
+├── node_modules
+└── package.json
+```
 
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
+You will see a `gulpfile.js`, which is to setup [Gulp](http://gulpjs.com), a task automator and building system. It is very useful to speed up our workflow.
 
+## Developing your game
+
+### Modules
+
+This project includes [Browserify](http://browserify.org/), a tool for managing dependencies and modules (like RequireJS). One of the cool things about Browserify is that it allows you to use node modules in your browser application. For instance, if you need Lo-Dash in your project, you would install it as a regular npm package:
+
+```
+npm install lodash-node
+```
+
+And then in your JavaScript files, you would just need:
+
+```
+var _ = require('lodash-module');
+```
+
+You can require local files too in this fashion, but you need to put a path (relative to the current file):
+
+```
+var PlayScene = require('./play_scene.js');
+```
+
+### Running the game
+
+In the `gulpfile.js` there are defined some tasks to aid development. The default task will run the linter to analyse your code for errors, run Browserify and launch a web server.
+
+```
+gulp
+```
+
+Now open [0.0.0.0:8080](http://0.0.0.0:8080) and you will see a "Hello, world" game.
+
+However, while you are developing, **you will want to use the `--watch` flag**. This will make Browserify to listen for changes in JavaScript files and make a new build.
+
+```
+gulp --watch
+```
+
+#### Releasing and deploying
+
+You can create a build, which will create a directory with only your project files ready to be distributed.
+
+```
+gulp dist
+```
+
+You can try this by going to the `dist` directory, launching a web server from there and load your game in the browser:
+
+```
+cd dist
+python -m SimpleHTTPServer
+```
+
+If you want to **deploy the game into your own server**, a rsync task has been included. You just need to setup your server so the only thing left to do is to upload static files to a directory.
+
+Edit `gulp.config.json` to put the login details of your server. You will probably want to add your public RSA key to the `authorized_hosts` in your server.
+
+```
+gulp deploy
+```
 
 ## License
 
-MIT
+© 2014 Belén "BenKo" Albeza.
+
+`generator-gamejam` is released under the MIT license. Read `LICENSE` for details.
