@@ -79,22 +79,48 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
     app: function () {
+      // npm's package.json
       this.fs.copyTpl(
         this.templatePath('_package.json'),
         this.destinationPath('package.json'),
         this
       );
+      // index.html
       this.fs.copyTpl(
-        this.templatePath('_index.html'),
-        this.destinationPath('index.html'),
+        this.templatePath('app/_index.html'),
+        this.destinationPath('app/index.html'),
         this
       );
+      // css
+      this.fs.copy(
+        this.templatePath('app/styles.css'),
+        this.destinationPath('app/styles.css')
+      );
+      // images
+      this.fs.copy(
+        this.templatePath('app/images/*'),
+        this.destinationPath('app/images')
+      );
+      // js files
+      this.fs.copy(this.templatePath('app/js/*'), this.destinationPath('app/js'));
     },
 
     projectfiles: function () {
       this.fs.copy(
         this.templatePath('jshintrc'),
         this.destinationPath('.jshintrc')
+      );
+      this.fs.copy(
+        this.templatePath('gitignore'),
+        this.destinationPath('.gitignore')
+      );
+      this.fs.copy(
+        this.templatePath('gulp.config.json'),
+        this.destinationPath('gulp.config.json')
+      );
+      this.fs.copy(
+        this.templatePath('gulpfile.js'),
+        this.destinationPath('gulpfile.js')
       );
     }
   },

@@ -1,0 +1,7 @@
+{
+  "deploy": {
+    "user": "root",
+    "host": "somewhere.com",
+    "destination": "/path/to/folder/"
+  }
+}
