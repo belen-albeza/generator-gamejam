@@ -111,6 +111,14 @@ gulp deploy
 
 There are several places you can submit your game to, like itch.io or Ludum Dare. These websites have their own wrapper or viewer over your game. That's why `raw.html` exists: it is the bare game ready to be embedded in an iframe.
 
+## Changelog
+
+**1.1.0** (1 May 2015)
+
+- Use `gulp-livereload`.
+- Now the game itself is in its own html file (`raw.html`) so it can be embedded into an iframe by third-party websites.
+- Remove linter (this is aimed for gamejams, after all).
+
 ## License
 
 © 2014 Belén "BenKo" Albeza.
