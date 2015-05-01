@@ -2,9 +2,9 @@
 
 This is a [Yeoman](http://yeoman.io) generator for game jam HTML5 projects. With this you can quickly create a project skeleton that contains:
 
-- An `index.html` file that displays a canvas and loads the awesome [Phaser](http://phaser.io) game library.
+- An `index.html` file that displays your game using the awesome [Phaser](http://phaser.io) game framework.
 - A local web server you can run your game into (needed for Phaser).
-- Developer tools: Gulp, JSHint, Browserify.
+- Developer tools: Gulp, Browserify, livereload.
 - A task to create a release of your game that you can zip or backup.
 - A task to deploy your game into your own server online.
 
@@ -33,6 +33,7 @@ You will get this project skeleton:
 │   │   ├── phaser.png
 │   │   └── preloader_bar.png
 │   ├── index.html
+│   ├── raw.html
 │   ├── js
 │   │   ├── main.js
 │   │   └── play_scene.js
@@ -69,7 +70,7 @@ var PlayScene = require('./play_scene.js');
 
 ### Running the game
 
-In the `gulpfile.js` there are defined some tasks to aid development. The default task will run the linter to analyse your code for errors, run Browserify and launch a web server.
+In the `gulpfile.js` there are defined some tasks to aid development. The default task will run Browserify and launch a web server.
 
 ```
 gulp
@@ -77,10 +78,10 @@ gulp
 
 Now open [0.0.0.0:8080](http://0.0.0.0:8080) and you will see a "Hello, world" game.
 
-However, while you are developing, **you will want to use the `--watch` flag**. This will make Browserify to listen for changes in JavaScript files and make a new build.
+However, while you are developing, **you will want to use the `run` task. This is similar to the default task, but will watch your JS files for changes and re-run Browserify automatically. This also enables **livereload** (you will need a browser plugin [like this one for Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei), so the page will reload automatically as well whenever a JS file changes.
 
 ```
-gulp --watch
+gulp run
 ```
 
 #### Releasing and deploying
@@ -105,6 +106,10 @@ Edit `gulp.config.json` to put the login details of your server. You will probab
 ```
 gulp deploy
 ```
+
+#### Embedding your game
+
+There are several places you can submit your game to, like itch.io or Ludum Dare. These websites have their own wrapper or viewer over your game. That's why `raw.html` exists: it is the bare game ready to be embedded in an iframe.
 
 ## License
 

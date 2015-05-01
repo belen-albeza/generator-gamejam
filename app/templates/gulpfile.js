@@ -66,7 +66,9 @@ gulp.task('build', ['js']);
 
 gulp.task('copy', function () {
   gulp.src([
-    'index.html', 'styles.css', 'images/**/*', 'fonts/**/*', 'audio/**/*'
+    'index.html', 'raw.html',
+    'styles.css',
+    'images/**/*', 'fonts/**/*', 'audio/**/*'
   ], { cwd: './app', base: './app' })
   .pipe(gulp.dest('./dist/'));
 
@@ -94,14 +96,14 @@ gulp.task('deploy', ['dist'], function () {
 // dev tasks
 //
 
-gulp.task('watch', ['connectt'], function () {
+gulp.task('watch', ['connect'], function () {
   livereload.listen();
 
   bundler = watchify(bundler, watchify.args);
   bundler.on('update', bundle);
 });
 
-gulp.task('server', ['build', 'watch']);
+gulp.task('run', ['build', 'watch']);
 
 //
 // default task

@@ -16,10 +16,13 @@ a {
   color: #c39;
 }
 
-div#game {
+main {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+#game {
   border: 1px solid #333;
-  width: 80rem;
-  margin: 1rem auto;
 }
 
 footer {

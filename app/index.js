@@ -22,7 +22,7 @@ var LICENSE_DATA = {
     name: 'GPL v3.0',
     url: 'http://www.gnu.org/licenses/lgpl-3.0-standalone.html'
   }
-}
+};
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
@@ -55,6 +55,10 @@ module.exports = yeoman.generators.Base.extend({
       type: 'list',
       default: 0,
       choices: ['MIT', 'CC-BY-SA-4.0', 'CC-BY-NC-SA-4.0', 'GPL-3.0']
+    }, {
+      name: 'gameSize',
+      message: 'Which screen size your game will use?',
+      default: '800x600'
     }];
 
     this.prompt(prompts, function (props) {
@@ -67,6 +71,14 @@ module.exports = yeoman.generators.Base.extend({
       else {
         this.github = {};
       }
+
+      var size = props.gameSize.split('x');
+      var width = size.length === 2 ? parseInt(size[0], 10) : null;
+      var height = size.length === 2 ? parseInt(size[1], 10) : null;
+      this.gameSize = {
+        width: width || 800,
+        height: height || 600
+      };
 
       this.gameName = props.gameName;
       this.license = LICENSE_DATA[props.license] || {};
@@ -90,6 +102,12 @@ module.exports = yeoman.generators.Base.extend({
         this.destinationPath('app/index.html'),
         this
       );
+      // raw.html
+      this.fs.copyTpl(
+        this.templatePath('app/_raw.html'),
+        this.destinationPath('app/raw.html'),
+        this
+      );
       // css
       this.fs.copy(
         this.templatePath('app/styles.css'),
@@ -101,7 +119,15 @@ module.exports = yeoman.generators.Base.extend({
         this.destinationPath('app/images')
       );
       // js files
-      this.fs.copy(this.templatePath('app/js/*'), this.destinationPath('app/js'));
+      this.fs.copyTpl(
+        this.templatePath('app/js/_main.js'),
+        this.destinationPath('app/js/main.js'),
+        this
+      );
+      this.fs.copy(
+        this.templatePath('app/js/play_scene.js'),
+        this.destinationPath('app/js/play_scene.js')
+      );
     },
 
     projectfiles: function () {

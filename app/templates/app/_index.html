@@ -5,11 +5,14 @@
   <meta charset="utf-8">
 
   <link href="styles.css" rel="stylesheet" type="text/css">
-  <script src="js/lib/phaser.min.js"></script>
-  <script src="js/bundle.js"></script>
+  <style>
+  #game {
+    width: <%= gameSize.width %>px;
+    height: <%= gameSize.height %>px;
+  }
+  </style>
 </head>
-<body>
-  <% if (github) { %>
+<body><% if (github) { %>
   <header>
     <a href="https://www.github.com/<%= github.repository %>">
       <img style="position: absolute; top: 0; right: 0; border: 0;"
@@ -17,11 +20,11 @@
         alt="Fork me on GitHub">
     </a>
   </header>
-  <% } %>
-
+<% } %>
   <main>
-    <div id="game"></div>
+    <iframe id="game" src="raw.html"></iframe>
   </main>
+
   <footer>
     <p><strong><%= gameName %></strong><br>
       by <a href="http://github.com/<%= github.username %>"><%= github.username %></a></p>
