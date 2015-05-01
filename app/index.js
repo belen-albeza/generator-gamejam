@@ -61,8 +61,7 @@ module.exports = yeoman.generators.Base.extend({
       if (props.githubUsername) {
         this.github = {
           username: props.githubUsername,
-          repository: 'https://github.com/' + props.githubUsername +
-            '/' + props.repoName
+          repository: props.githubUsername + '/' + props.repoName
         };
       }
       else {

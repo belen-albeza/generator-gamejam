@@ -4,14 +4,17 @@
   "version": "0.0.0",
   "author": "",
   "license": "<%= license.key %>",
+  <% if (github) { %>
+  "repository": "<%= github.repository %>",
+  "author": "<%= github.username %>",
+  <% } %>
   "dependencies": {
     "browserify": "*",
     "gulp": "*",
     "gulp-connect": "*",
-    "gulp-jshint": "*",
+    "gulp-livereload": "*",
     "gulp-rsync": "*",
     "gulp-util": "*",
-    "jshint-stylish": "*",
     "phaser": "*",
     "vinyl-source-stream": "*",
     "watchify": "*"
