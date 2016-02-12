@@ -1,6 +1,3 @@
-// IMPORTANT
-// edit gulp.config.json and customize there your deployment settings
-
 'use strict';
 
 var gulp = require('gulp');
@@ -11,12 +8,17 @@ var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 
 var browserSync = require('browser-sync').create();
-var rsync = require('gulp-rsync');
 var del = require('del');
-
 var merge = require('merge-stream');
 
+<% if (deployRsync) { %>
+// IMPORTANT
+// edit gulp.config.json and customize there your deployment settings
+var rsync = require('gulp-rsync');
 var config = require('./gulp.config.json');
+<% } if (deployPages) { %>
+var ghpages = require('gulp-gh-pages');
+<% } %>
 
 
 //
@@ -69,11 +71,11 @@ gulp.task('dist', ['build'], function () {
 });
 
 gulp.task('clean', function () {
-    return del(['.tmp', 'dist']);
+  return del(['.tmp', 'dist']);
 });
 
-
-gulp.task('deploy', ['dist'], function () {
+<% if (deployRsync) { %>
+gulp.task('deploy:rsync', ['dist'], function () {
   return gulp.src('dist')
     .pipe(rsync({
       root: 'dist',
@@ -86,6 +88,14 @@ gulp.task('deploy', ['dist'], function () {
       incremental: true
     }));
 });
+<% } if (deployPages) { %>
+gulp.task('deploy:ghpages', ['dist'], function () {
+  return gulp.src('dist/**/*')
+    .pipe(ghpages());
+});
+<% } %>
+<% if (deployTarget === 'rsync') { %>gulp.task('deploy', ['deploy:rsync'])<% } %>
+<% if (deployTarget === 'ghpages') { %>gulp.task('deploy', ['deploy:ghpages'])<% } %>
 
 //
 // dev tasks

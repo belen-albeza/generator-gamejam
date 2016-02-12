@@ -13,8 +13,9 @@
     "browser-sync": "*",
     "del": "*",
     "gulp": "*",
-    "gulp-connect": "*",
-    "gulp-rsync": "*",
+    "gulp-connect": "*",<% if (deployPages) { %>
+    "gulp-gh-pages": "*", <% } if (deployRsync) { %>
+    "gulp-rsync": "*",<% } %>
     "gulp-util": "*",
     "merge-stream": "*",
     "phaser": "*",

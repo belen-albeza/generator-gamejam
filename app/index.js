@@ -32,11 +32,6 @@ module.exports = yeoman.generators.Base.extend({
   prompting: function () {
     var done = this.async();
 
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to the beautiful' + chalk.red('Gamejam') + ' generator!'
-    ));
-
     var prompts = [{
       name: 'gameName',
       message: 'What\'s the name of your game?',
@@ -44,7 +39,8 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       name: 'githubUsername',
       message: 'What is your Github username',
-      default: 'someone'
+      default: 'someone',
+      store: true
     }, {
       name: 'repoName',
       message: 'What is this repository name?',
@@ -59,6 +55,18 @@ module.exports = yeoman.generators.Base.extend({
       name: 'gameSize',
       message: 'Which screen size your game will use?',
       default: '800x600'
+    }, {
+      type: 'list',
+      name: 'deploy',
+      message: 'Where do you want to deploy?',
+      choices: [
+        { name: 'Github pages', value: 'ghpages' },
+        { name: 'My own server', value: 'rsync' },
+        { name: 'Both', value: 'all' },
+        { name: 'Nowhere', value: 'none' }
+      ],
+      default: 'ghpages',
+      store: true
     }];
 
     this.prompt(prompts, function (props) {
@@ -83,6 +91,9 @@ module.exports = yeoman.generators.Base.extend({
       this.gameName = props.gameName;
       this.license = LICENSE_DATA[props.license] || {};
       this.license.key = props.license;
+      this.deployTarget = props.deploy;
+      this.deployRsync = props.deploy === 'rsync' || props.deploy === 'all';
+      this.deployPages = props.deploy === 'ghpages' || props.deploy === 'all';
 
       done();
     }.bind(this));
@@ -139,22 +150,23 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath('gitignore'),
         this.destinationPath('.gitignore')
       );
-      this.fs.copy(
-        this.templatePath('gulp.config.json'),
-        this.destinationPath('gulp.config.json')
-      );
-      this.fs.copy(
-        this.templatePath('gulpfile.js'),
-        this.destinationPath('gulpfile.js')
+
+      if (this.deployRsync) {
+        this.fs.copy(
+          this.templatePath('gulp.config.json'),
+          this.destinationPath('gulp.config.json')
+        );
+      }
+
+      this.fs.copyTpl(
+        this.templatePath('_gulpfile.js'),
+        this.destinationPath('gulpfile.js'),
+        this
       );
     }
   },
 
   install: function () {
-    this.installDependencies({
-      bower: false,
-      npm: true,
-      skipInstall: this.options['skip-install']
-    });
+    this.installDependencies({ bower: false });
   }
 });
