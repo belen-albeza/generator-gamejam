@@ -20,8 +20,8 @@ try {
   config = require('./gulp.config.json');
 }
 catch (e) {
-  console.error('Edit or create gulp.config.json to customize your deployment' +
-    'settings');
+  console.warn('Edit or create gulp.config.json to customize your deployment' +
+    ' settings.');
 }
 <% } if (deployPages) { %>
 var ghpages = require('gulp-gh-pages');
