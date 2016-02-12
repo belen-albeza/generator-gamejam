@@ -105,6 +105,10 @@ There are several places you can submit your game to, like itch.io or Ludum Dare
 
 ## Changelog
 
+**1.2.1** (12 Feb 2016)
+
+- Updated README
+
 **1.2.0** (12 Feb 2016)
 
 - Used `browser-sync` instead of relying on live-reload.
@@ -121,6 +125,6 @@ There are several places you can submit your game to, like itch.io or Ludum Dare
 
 ## License
 
-© 2014 Belén "BenKo" Albeza.
+© 2014-2016 Belén "BenKo" Albeza.
 
 `generator-gamejam` is released under the MIT license. Read `LICENSE` for details.
