@@ -113,11 +113,19 @@ There are several places you can submit your game to, like itch.io or Ludum Dare
 
 ## Changelog
 
+**1.2.0** (12 Feb 2016)
+
+- Used `browser-sync` instead of relying on live-reload.
+- Added `README.md` file to the scaffolding
+- Added deployment with Github Pages
+- Made deployment optional
+- Fixed gulp not running when `config.local.json` could not be found
+
 **1.1.0** (1 May 2015)
 
-- Use `gulp-livereload`.
+- Used `gulp-livereload`.
 - Now the game itself is in its own html file (`raw.html`) so it can be embedded into an iframe by third-party websites.
-- Remove linter (this is aimed for gamejams, after all).
+- Removed linter (this is aimed for gamejams, after all).
 
 ## License
 
