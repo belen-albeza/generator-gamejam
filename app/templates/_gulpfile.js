@@ -15,7 +15,14 @@ var merge = require('merge-stream');
 // IMPORTANT
 // edit gulp.config.json and customize there your deployment settings
 var rsync = require('gulp-rsync');
-var config = require('./gulp.config.json');
+var config = {};
+try {
+  config = require('./gulp.config.json');
+}
+catch (e) {
+  console.error('Edit or create gulp.config.json to customize your deployment' +
+    'settings');
+}
 <% } if (deployPages) { %>
 var ghpages = require('gulp-gh-pages');
 <% } %>
@@ -26,7 +33,7 @@ var ghpages = require('gulp-gh-pages');
 //
 
 var bundler = browserify([
-  './app/js/main.js'
+  './src/js/main.js'
 ]);
 
 var bundle = function ()  {
@@ -61,7 +68,7 @@ gulp.task('dist', ['build'], function () {
     'index.html', 'raw.html',
     'styles.css',
     'images/**/*', 'fonts/**/*', 'audio/**/*'
-  ], { cwd: './app', base: './app' })
+  ], { cwd: './src', base: './src' })
     .pipe(gulp.dest('./dist/'));
 
   var builtFiles = gulp.src(['js/**/*'], { cwd: '.tmp', base: '.tmp' })
@@ -71,7 +78,7 @@ gulp.task('dist', ['build'], function () {
 });
 
 gulp.task('clean', function () {
-  return del(['.tmp', 'dist']);
+  return del(['.tmp', 'dist', '.publish']);
 });
 
 <% if (deployRsync) { %>
@@ -108,10 +115,10 @@ gulp.task('watch', function () {
 
 gulp.task('run', ['watch', 'build'], function () {
   browserSync.init({
-    server: ['app', '.tmp']
+    server: ['src', '.tmp']
   });
 
-  gulp.watch('app/**/*.{html,css}').on('change', browserSync.reload);
+  gulp.watch('src/**/*.{html,css}').on('change', browserSync.reload);
 });
 
 //

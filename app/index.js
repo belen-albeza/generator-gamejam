@@ -73,7 +73,8 @@ module.exports = yeoman.generators.Base.extend({
       if (props.githubUsername) {
         this.github = {
           username: props.githubUsername,
-          repository: props.githubUsername + '/' + props.repoName
+          repository: props.githubUsername + '/' + props.repoName,
+          repoName: props.repoName
         };
       }
       else {
@@ -109,35 +110,35 @@ module.exports = yeoman.generators.Base.extend({
       );
       // index.html
       this.fs.copyTpl(
-        this.templatePath('app/_index.html'),
-        this.destinationPath('app/index.html'),
+        this.templatePath('src/_index.html'),
+        this.destinationPath('src/index.html'),
         this
       );
       // raw.html
       this.fs.copyTpl(
-        this.templatePath('app/_raw.html'),
-        this.destinationPath('app/raw.html'),
+        this.templatePath('src/_raw.html'),
+        this.destinationPath('src/raw.html'),
         this
       );
       // css
       this.fs.copy(
-        this.templatePath('app/styles.css'),
-        this.destinationPath('app/styles.css')
+        this.templatePath('src/styles.css'),
+        this.destinationPath('src/styles.css')
       );
       // images
       this.fs.copy(
-        this.templatePath('app/images/*'),
-        this.destinationPath('app/images')
+        this.templatePath('src/images/*'),
+        this.destinationPath('src/images')
       );
       // js files
       this.fs.copyTpl(
-        this.templatePath('app/js/_main.js'),
-        this.destinationPath('app/js/main.js'),
+        this.templatePath('src/js/_main.js'),
+        this.destinationPath('src/js/main.js'),
         this
       );
       this.fs.copy(
-        this.templatePath('app/js/play_scene.js'),
-        this.destinationPath('app/js/play_scene.js')
+        this.templatePath('src/js/play_scene.js'),
+        this.destinationPath('src/js/play_scene.js')
       );
     },
 
@@ -161,6 +162,12 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copyTpl(
         this.templatePath('_gulpfile.js'),
         this.destinationPath('gulpfile.js'),
+        this
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('_README.md'),
+        this.destinationPath('README.md'),
         this
       );
     }
