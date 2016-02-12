@@ -28,7 +28,7 @@ yo gamejam
 You will get this project skeleton:
 
 ```
-├── app
+├── src
 │   ├── images
 │   │   ├── phaser.png
 │   │   └── preloader_bar.png
@@ -70,15 +70,22 @@ var PlayScene = require('./play_scene.js');
 
 ### Running the game
 
-In the `gulpfile.js` there are defined some tasks to aid development. The default task will run Browserify and launch a web server.
+In the `gulpfile.js` there are defined some tasks to aid development. The default task will build the project in a `dist` folder.
 
 ```
 gulp
 ```
 
+You can now run a local server over `dist`. For instance:
+
+```
+npm -g install http-server
+http-server dist
+```
+
 Now open [0.0.0.0:8080](http://0.0.0.0:8080) and you will see a "Hello, world" game.
 
-However, while you are developing, **you will want to use the `run` task. This is similar to the default task, but will watch your JS files for changes and re-run Browserify automatically. This also enables **livereload** (you will need a browser plugin [like this one for Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei), so the page will reload automatically as well whenever a JS file changes.
+However, while you are developing, **you will want to use the `run` task**. This is similar to the default task, but will watch your JS files for changes and re-run Browserify automatically. This also uses browser-sync to reload your browser automatically whenever there are changes to JavaScript, HTML or CSS files.
 
 ```
 gulp run
@@ -90,21 +97,6 @@ You can create a build, which will create a directory with only your project fil
 
 ```
 gulp dist
-```
-
-You can try this by going to the `dist` directory, launching a web server from there and load your game in the browser:
-
-```
-cd dist
-python -m SimpleHTTPServer
-```
-
-If you want to **deploy the game into your own server**, a rsync task has been included. You just need to setup your server so the only thing left to do is to upload static files to a directory.
-
-Edit `gulp.config.json` to put the login details of your server. You will probably want to add your public RSA key to the `authorized_hosts` in your server.
-
-```
-gulp deploy
 ```
 
 #### Embedding your game
