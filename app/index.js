@@ -32,11 +32,6 @@ module.exports = yeoman.generators.Base.extend({
   prompting: function () {
     var done = this.async();
 
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to the beautiful' + chalk.red('Gamejam') + ' generator!'
-    ));
-
     var prompts = [{
       name: 'gameName',
       message: 'What\'s the name of your game?',
@@ -44,7 +39,8 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       name: 'githubUsername',
       message: 'What is your Github username',
-      default: 'someone'
+      default: 'someone',
+      store: true
     }, {
       name: 'repoName',
       message: 'What is this repository name?',
@@ -59,13 +55,26 @@ module.exports = yeoman.generators.Base.extend({
       name: 'gameSize',
       message: 'Which screen size your game will use?',
       default: '800x600'
+    }, {
+      type: 'list',
+      name: 'deploy',
+      message: 'Where do you want to deploy?',
+      choices: [
+        { name: 'Github pages', value: 'ghpages' },
+        { name: 'My own server', value: 'rsync' },
+        { name: 'Both', value: 'all' },
+        { name: 'Nowhere', value: 'none' }
+      ],
+      default: 'ghpages',
+      store: true
     }];
 
     this.prompt(prompts, function (props) {
       if (props.githubUsername) {
         this.github = {
           username: props.githubUsername,
-          repository: props.githubUsername + '/' + props.repoName
+          repository: props.githubUsername + '/' + props.repoName,
+          repoName: props.repoName
         };
       }
       else {
@@ -83,6 +92,9 @@ module.exports = yeoman.generators.Base.extend({
       this.gameName = props.gameName;
       this.license = LICENSE_DATA[props.license] || {};
       this.license.key = props.license;
+      this.deployTarget = props.deploy;
+      this.deployRsync = props.deploy === 'rsync' || props.deploy === 'all';
+      this.deployPages = props.deploy === 'ghpages' || props.deploy === 'all';
 
       done();
     }.bind(this));
@@ -98,35 +110,35 @@ module.exports = yeoman.generators.Base.extend({
       );
       // index.html
       this.fs.copyTpl(
-        this.templatePath('app/_index.html'),
-        this.destinationPath('app/index.html'),
+        this.templatePath('src/_index.html'),
+        this.destinationPath('src/index.html'),
         this
       );
       // raw.html
       this.fs.copyTpl(
-        this.templatePath('app/_raw.html'),
-        this.destinationPath('app/raw.html'),
+        this.templatePath('src/_raw.html'),
+        this.destinationPath('src/raw.html'),
         this
       );
       // css
       this.fs.copy(
-        this.templatePath('app/styles.css'),
-        this.destinationPath('app/styles.css')
+        this.templatePath('src/styles.css'),
+        this.destinationPath('src/styles.css')
       );
       // images
       this.fs.copy(
-        this.templatePath('app/images/*'),
-        this.destinationPath('app/images')
+        this.templatePath('src/images/*'),
+        this.destinationPath('src/images')
       );
       // js files
       this.fs.copyTpl(
-        this.templatePath('app/js/_main.js'),
-        this.destinationPath('app/js/main.js'),
+        this.templatePath('src/js/_main.js'),
+        this.destinationPath('src/js/main.js'),
         this
       );
       this.fs.copy(
-        this.templatePath('app/js/play_scene.js'),
-        this.destinationPath('app/js/play_scene.js')
+        this.templatePath('src/js/play_scene.js'),
+        this.destinationPath('src/js/play_scene.js')
       );
     },
 
@@ -139,22 +151,29 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath('gitignore'),
         this.destinationPath('.gitignore')
       );
-      this.fs.copy(
-        this.templatePath('gulp.config.json'),
-        this.destinationPath('gulp.config.json')
+
+      if (this.deployRsync) {
+        this.fs.copy(
+          this.templatePath('gulp.config.json'),
+          this.destinationPath('gulp.config.json')
+        );
+      }
+
+      this.fs.copyTpl(
+        this.templatePath('_gulpfile.js'),
+        this.destinationPath('gulpfile.js'),
+        this
       );
-      this.fs.copy(
-        this.templatePath('gulpfile.js'),
-        this.destinationPath('gulpfile.js')
+
+      this.fs.copyTpl(
+        this.templatePath('_README.md'),
+        this.destinationPath('README.md'),
+        this
       );
     }
   },
 
   install: function () {
-    this.installDependencies({
-      bower: false,
-      npm: true,
-      skipInstall: this.options['skip-install']
-    });
+    this.installDependencies({ bower: false });
   }
 });
