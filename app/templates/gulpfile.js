@@ -10,9 +10,11 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 
-var livereload = require('gulp-livereload');
-var connect = require('gulp-connect');
+var browserSync = require('browser-sync').create();
 var rsync = require('gulp-rsync');
+var del = require('del');
+
+var merge = require('merge-stream');
 
 var config = require('./gulp.config.json');
 
@@ -31,7 +33,7 @@ var bundle = function ()  {
     .on('error', gutil.log)
     .pipe(source('bundle.js'))
     .pipe(gulp.dest('.tmp/js/'))
-    .pipe(livereload());
+    .pipe(browserSync.stream({once: true}));
 };
 
 
@@ -40,23 +42,11 @@ gulp.task('browserify', bundle);
 // 3rd party libs that don't play nice with browserify
 gulp.task('libs', function () {
   var dir = './node_modules/phaser/dist/';
-  gulp.src(['phaser.min.js', 'phaser.map'], { cwd: dir, base: dir})
+  return gulp.src(['phaser.min.js', 'phaser.map'], { cwd: dir, base: dir})
     .pipe(gulp.dest('./.tmp/js/lib/'));
 });
 
 gulp.task('js', ['browserify', 'libs']);
-
-
-//
-// web server
-//
-
-gulp.task('connect', function () {
-  connect.server({
-    root: ['app', '.tmp']
-  });
-});
-
 
 //
 // build and deploy
@@ -64,19 +54,24 @@ gulp.task('connect', function () {
 
 gulp.task('build', ['js']);
 
-gulp.task('copy', function () {
-  gulp.src([
+gulp.task('dist', ['build'], function () {
+  var rawFiles = gulp.src([
     'index.html', 'raw.html',
     'styles.css',
     'images/**/*', 'fonts/**/*', 'audio/**/*'
   ], { cwd: './app', base: './app' })
-  .pipe(gulp.dest('./dist/'));
-
-  gulp.src(['js/**/*'], { cwd: '.tmp', base: '.tmp' })
     .pipe(gulp.dest('./dist/'));
+
+  var builtFiles = gulp.src(['js/**/*'], { cwd: '.tmp', base: '.tmp' })
+    .pipe(gulp.dest('./dist/'));
+
+  return merge(rawFiles, builtFiles);
 });
 
-gulp.task('dist', ['build', 'copy']);
+gulp.task('clean', function () {
+    return del(['.tmp', 'dist']);
+});
+
 
 gulp.task('deploy', ['dist'], function () {
   return gulp.src('dist')
@@ -96,17 +91,21 @@ gulp.task('deploy', ['dist'], function () {
 // dev tasks
 //
 
-gulp.task('watch', ['connect'], function () {
-  livereload.listen();
-
+gulp.task('watch', function () {
   bundler = watchify(bundler, watchify.args);
   bundler.on('update', bundle);
 });
 
-gulp.task('run', ['build', 'watch']);
+gulp.task('run', ['watch', 'build'], function () {
+  browserSync.init({
+    server: ['app', '.tmp']
+  });
+
+  gulp.watch('app/**/*.{html,css}').on('change', browserSync.reload);
+});
 
 //
 // default task
 //
 
-gulp.task('default', ['build', 'connect']);
+gulp.task('default', ['dist']);
