@@ -1,6 +1,6 @@
 {
   "name": "generator-gamejam",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Yeoman generator for game jam projects (Phaser)",
   "license": "MIT",
   "main": "app/index.js",
