@@ -105,6 +105,9 @@ There are several places you can submit your game to, like itch.io or Ludum Dare
 
 ## Changelog
 
+**1.2.2** (2 Jul 2016)
+- Fix bug in which `phaser.min.js` and `phaser.map` where not found.
+
 **1.2.1** (12 Feb 2016)
 
 - Updated README
